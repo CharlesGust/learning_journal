@@ -23,8 +23,17 @@
     <h3>{{ entry.title }}</h3>
     <p class="dateline">{{ entry.created.strftime('%b. %d, %Y')}}</p>
     <div class="entry_body">
-      {{ entry.text|safe }}
     </div>
+    {% if session.logged_in %}
+      <form action="{{ url_for('edit_entry') }}" method="POST" class="edit_entry">
+        <input type="text" value="{{entry.title}}" size="30" name="edit_title{{entry.id}}"/>
+        <textarea name='edit_text{{entry.id}}' rows="5" cols="80">{{ entry.text|safe }}</textarea>
+        <input type='submit' value='Edit' name='edit'>
+        <input type='hidden' value="{{entry.id}}" name='edit_id'>
+      </form>
+    {% else %}
+      {{ entry.text|safe }}
+    {% endif %}
   </article>
   {% else %}
   <div class="entry">
@@ -32,4 +41,3 @@
   </div>
   {% endfor %}
 {% endblock %}
-

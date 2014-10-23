@@ -13,6 +13,7 @@ from journal import init_db
 TEST_DSN = 'dbname=test_learning_journal user=charlesgust'
 SUBMIT_BTN = '<input type="submit" value="Share" name="Share"/>'
 
+
 def clear_db():
     with closing(connect_db()) as db:
         db.cursor().execute("DROP TABLE entries")
@@ -125,6 +126,34 @@ def test_add_entries(db):
     assert 'No entries here so far' not in actual
     for expected in entry_data.values():
         assert expected in actual
+
+"""
+def test_update_entry(db):
+    entry_data = {
+        u'title': u'Hello',
+        u'text': u'This is a post',
+        }
+    actual = app.test_client().post(
+        '/add', data=entry_data, follow_redirects=True
+        ).data
+    assert 'No entries here so far' not in actual
+    for expected in entry_data.values():
+        assert expected in actual
+
+    edit_data = {
+        u'edit_id':     u"1",
+        u'edit_title':  u"Hello Again",
+        u'edit_text':   u"This is an edited post",
+    }
+    actual = app.test_client().post(
+        '/edit', data=edit_data, follow_redirects=True
+        ).data
+    for expected in edit_data.values():
+        # if type(expected) == int:
+        #    assert expected
+        assert expected in actual
+    return
+"""
 
 
 def login_helper(username, password):
