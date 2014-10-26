@@ -13,6 +13,7 @@ from journal import init_db
 TEST_DSN = 'dbname=test_learning_journal user=charlesgust'
 SUBMIT_BTN = '<input type="submit" value="Share" name="Share"/>'
 
+
 def clear_db():
     with closing(connect_db()) as db:
         db.cursor().execute("DROP TABLE entries")
@@ -125,6 +126,36 @@ def test_add_entries(db):
     assert 'No entries here so far' not in actual
     for expected in entry_data.values():
         assert expected in actual
+
+
+def test_update_entry(db):
+    entry_data = {
+        u'title': u'Hello',
+        u'text': u'This is a post',
+        }
+    with app.test_client() as c:
+        actual = c.post(
+            '/add', data=entry_data, follow_redirects=True
+            ).data
+        assert 'No entries here so far' not in actual
+        for expected in entry_data.values():
+            assert expected in actual
+
+        """
+        CMGTODO: How to test the edit?
+
+        edit_data = {
+            u'title':  u"Hello Again",
+            u'text':   u"This is an edited post",
+        }
+        actual = c.post(
+            '/submit/1', data=edit_data, follow_redirects=True
+            ).data
+        for expected in edit_data.values():
+            assert expected in actual
+        """
+
+    return
 
 
 def login_helper(username, password):
